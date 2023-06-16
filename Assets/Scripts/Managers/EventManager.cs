@@ -16,9 +16,12 @@ public static class EventManager
     public static Func<bool> IsPointerOverUI;
     #endregion
 
-  
 
- 
+    public static Action<Bullet> BulletMerged;
+    public static Action<Bullet> BulletCarried;
+
+
+
 
 
 }

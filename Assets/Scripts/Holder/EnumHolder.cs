@@ -6,7 +6,12 @@
     PauseLevel,
     ResetProgressData,
 }
-
+public enum MergeAreaStates
+{
+    ChoosingBullet,
+    BulletOnDrag,
+    BulletPlaced
+}
 public enum InGamePanelTypes
 {
     OnlyLevel,

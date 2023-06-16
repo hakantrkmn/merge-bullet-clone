@@ -10,6 +10,18 @@ public struct TutorialPanels
 }
 
 
+[Serializable]
+public struct BulletInfo
+{
+    public int level;
+    public int damage;
+    public GameObject prefab;
+    public int health;
+}
+
+
+
+
 #region Incremental Idle
 [Serializable]
 public class IncrementalIdleValues
