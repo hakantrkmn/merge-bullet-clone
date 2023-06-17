@@ -9,19 +9,52 @@ public class MergeAreaController : MonoBehaviour
     public MergeAreaCreator mergeAreaCreator;
     public LayerMask cellLayer;
     public LayerMask groundLayer;
-    public MergeAreaStates state;
+    MergeAreaStates _state;
     public Transform gunsPosition;
+
     Transform _carryBullet;
     MergeCellController _carryCell;
 
-    void CreateBullet()
+
+    private void Start()
+    {
+        LoadAreaData();
+    }
+
+    private void LoadAreaData()
+    {
+        var loadData = Scriptable.GameData().bullets;
+        foreach (var data in loadData)
+            CreateBullet(data.level);
+    }
+
+    private void OnEnable()
+    {
+        EventManager.ShotButtonClicked += ReleaseBullets;
+        EventManager.BuyBulletButtonClicked += CreateBullet;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.ShotButtonClicked -= ReleaseBullets;
+        EventManager.BuyBulletButtonClicked -= CreateBullet;
+    }
+
+    private void CreateBullet()
     {
         var bullet = Scriptable.BulletData().bulletInfos[0];
         var emptyCell = mergeAreaCreator.GetEmptyCell();
-        emptyCell.SpawnBullet(bullet);
+        emptyCell.SpawnBullet(bullet, false);
     }
 
-    void ChooseBulletToDrag()
+    private void CreateBullet(int level)
+    {
+        var bullet = Scriptable.BulletData().bulletInfos[level];
+        var emptyCell = mergeAreaCreator.GetEmptyCell();
+        emptyCell.SpawnBullet(bullet, true);
+    }
+
+    private void ChooseBulletToDrag()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -33,13 +66,13 @@ public class MergeAreaController : MonoBehaviour
                 {
                     _carryBullet = hit.transform.GetComponent<MergeCellController>().cellBullet.transform;
                     _carryCell = hit.transform.GetComponent<MergeCellController>();
-                    state = MergeAreaStates.BulletOnDrag;
+                    _state = MergeAreaStates.BulletOnDrag;
                 }
             }
         }
     }
 
-    void DragBullet()
+    private void DragBullet()
     {
         if (Input.GetMouseButton(0))
         {
@@ -53,77 +86,58 @@ public class MergeAreaController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             PlaceBullet();
-            state = MergeAreaStates.ChoosingBullet;
-
+            _state = MergeAreaStates.ChoosingBullet;
         }
-        
     }
 
-    void PlaceBullet()
+    private void CarryBackBullet()
+    {
+        _carryCell.CarryBackBullet();
+        _carryCell = null;
+        _carryBullet = null;
+    }
+
+    private void PlaceBullet()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, cellLayer))
+        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, cellLayer))
+        {
+            if (hit.transform.GetComponent<MergeCellController>() != _carryCell)
             {
-                if (hit.transform.GetComponent<MergeCellController>() != _carryCell)
-                {
-                    if (hit.transform.GetComponent<MergeCellController>()
-                        .MergeBullets(_carryBullet.GetComponent<Bullet>())) return;
+                if (hit.transform.GetComponent<MergeCellController>()
+                    .MergeBullets(_carryBullet.GetComponent<BaseAmmo>())) return;
 
-                    _carryCell.CarryBackBullet();
-                    _carryCell = null;
-                    _carryBullet = null;
-                }
-                else
-                {
-                    _carryCell.CarryBackBullet();
-                    _carryCell = null;
-                    _carryBullet = null;
-                }
+                CarryBackBullet();
             }
             else
             {
-                _carryCell.CarryBackBullet();
-                _carryCell = null;
-                _carryBullet = null;
+                CarryBackBullet();
             }
-        
+        }
+        else
+        {
+            CarryBackBullet();
+        }
     }
 
     void ReleaseBullets()
     {
         Sequence release = DOTween.Sequence();
-        release.AppendCallback(() => EventManager.ReleaseBullets(gunsPosition.position.z, 3));
-        release.AppendInterval(3);
+        release.AppendCallback(() => EventManager.ReleaseBullets(gunsPosition.position.z, 2));
+        release.AppendInterval(2.1f);
         release.AppendCallback(() => EventManager.ShooterPhase());
-        
     }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        switch (_state)
         {
-            CreateBullet();
+            case MergeAreaStates.ChoosingBullet:
+                ChooseBulletToDrag();
+                break;
+            case MergeAreaStates.BulletOnDrag:
+                DragBullet();
+                break;
         }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            ReleaseBullets();
-        }
-
-        switch (state)
-        {
-           case MergeAreaStates.ChoosingBullet:
-               ChooseBulletToDrag();
-               break;
-           case MergeAreaStates.BulletOnDrag:
-               DragBullet();
-               break;
-           
-        }
-
-        
-
-        
-        
-        
-        
     }
 }

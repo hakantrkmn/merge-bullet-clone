@@ -6,13 +6,12 @@ using UnityEngine;
 
 public class MergeAreaCreator : MonoBehaviour
 {
-
     public Vector2 gridSize;
     public GameObject cellPrefab;
     public float padding;
 
     public List<MergeCellController> cells;
-
+    public Transform cellParent;
 
     private void OnEnable()
     {
@@ -26,11 +25,10 @@ public class MergeAreaCreator : MonoBehaviour
 
     private List<Transform> GetGunPoints()
     {
-        List<Transform> tempList = new List<Transform>();
+        var tempList = new List<Transform>();
+
         for (int i = 0; i < gridSize.x; i++)
-        {
             tempList.Add(cells[i].transform);
-        }
 
         return tempList;
     }
@@ -39,19 +37,17 @@ public class MergeAreaCreator : MonoBehaviour
     public void CreateMergeArea()
     {
         ClearCreatedCells();
-        
+
         for (int i = 0; i < gridSize.y; i++)
         {
             for (int j = 0; j < gridSize.x; j++)
             {
-                var cell = Instantiate(cellPrefab.gameObject, transform).GetComponent<MergeCellController>();
-                var gridBound = cell.Bound+padding;
+                var cell = Instantiate(cellPrefab.gameObject, cellParent, true).GetComponent<MergeCellController>();
+                var gridBound = cell.Bound + padding;
                 var xStart = ((gridSize.x * gridBound) - (gridBound)) / 2;
                 var yStart = ((gridSize.y * gridBound) - (gridBound)) / 2;
-                cell.transform.localPosition = new Vector3((-xStart+(gridBound*j)), 0, -yStart+(gridBound*i));
+                cell.transform.localPosition = new Vector3((-xStart + (gridBound * j)), 0, -yStart + (gridBound * i));
                 cells.Add(cell);
-
-                
             }
         }
     }
@@ -59,17 +55,13 @@ public class MergeAreaCreator : MonoBehaviour
     public MergeCellController GetEmptyCell()
     {
         foreach (var cell in cells)
-        {
-            if (cell.cellBullet==null)
-            {
+            if (cell.cellBullet == null)
                 return cell;
-            }
-        }
 
         return null;
     }
-    
-    void ClearCreatedCells()
+
+    private void ClearCreatedCells()
     {
         foreach (var cell in cells)
         {
@@ -78,7 +70,7 @@ public class MergeAreaCreator : MonoBehaviour
             else
                 Destroy(cell.gameObject);
         }
+
         cells.Clear();
     }
-
 }

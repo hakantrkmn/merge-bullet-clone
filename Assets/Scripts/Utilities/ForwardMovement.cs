@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,17 @@ public class ForwardMovement : MonoBehaviour
     private bool isMoveStraight = true;
 
     [SerializeField] private bool canControl;
-    
+
+    private void OnEnable()
+    {
+        EventManager.CanPlayerMove += canMove => canControl = canMove;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.CanPlayerMove -= canMove => canControl = canMove;
+    }
+
     void Update()
     {
         if (!canControl)

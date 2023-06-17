@@ -8,28 +8,25 @@ using Sirenix.OdinInspector;
 [CreateAssetMenu(fileName = "GameData", menuName = "ScriptableObjects/Game Data", order = 1)]
 public class GameData : ScriptableObject
 {
-    [BoxGroup("Level")]
-    public int fakeLevelIndex, realLevelIndex, levelLoopValue;
-    [BoxGroup("Level/Tutorial")]
-    public bool finiteTutorial;
-    [BoxGroup("Level/Tutorial"), ShowIf("finiteTutorial")]
-    public int tutorialLevelCount;
-
 
     [BoxGroup("Total Money")] public int totalMoneyAmount;
     
+    [BoxGroup("Ammo Price")] public List<BulletPrice> bulletPrices;
 
+    [BoxGroup("MergeGridData")] public List<AmmoInfo> bullets;
 
     //---------------------------------------------------------------------------------
-    private void ResetData()
+    [Button]
+    public void ResetData()
     {
-        fakeLevelIndex = 0;
-        realLevelIndex = 0;
-
-
         totalMoneyAmount = 0;
 
         PlayerPrefs.DeleteAll();
+        foreach (var price in bulletPrices)
+        {
+            price.isReached = false;
+        }
+        bullets.Clear();
         SaveManager.SaveGameData(this);
     }
 

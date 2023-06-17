@@ -4,107 +4,95 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 public class Gun : MonoBehaviour
 {
-    public BulletInfo bullet;
+    public AmmoInfo bullet;
     public Transform bulletPoint;
-    private Stack<Bullet> bulletPool = new Stack<Bullet>();
+    private Stack<BaseAmmo> bulletPool = new Stack<BaseAmmo>();
 
 
-    public bool isTriple;
+    bool _tripleShot;
     public Vector3 bulletScale;
     public float bulletRange;
 
-    private Vector3 bulletLastPos;
+    private Vector3 _bulletLastPos;
+
     private void OnEnable()
     {
-        EventManager.PlayerHitRangeGate += amount => bulletRange += amount;
+        EventManager.PlayerHitRangeGate += amount => bulletRange += amount / 10;
         EventManager.PlayerHitBulletSizeUpGate += () => bulletScale *= 2;
-        EventManager.PlayerHitTripleShotGate += () => isTriple = true;
+        EventManager.PlayerHitTripleShotGate += () => _tripleShot = true;
         EventManager.Fire += Fire;
-        EventManager.ShooterPhase += ShooterPhase;
+        EventManager.ShooterPhase += SetPool;
     }
 
     private void OnDisable()
     {
-        EventManager.PlayerHitRangeGate -= amount => bulletRange += amount;
+        EventManager.PlayerHitRangeGate -= amount => bulletRange += amount / 10;
         EventManager.PlayerHitBulletSizeUpGate -= () => bulletScale *= 2;
-        EventManager.PlayerHitTripleShotGate -= () => isTriple = true;
+        EventManager.PlayerHitTripleShotGate -= () => _tripleShot = true;
         EventManager.Fire += Fire;
-        EventManager.ShooterPhase -= ShooterPhase;
+        EventManager.ShooterPhase -= SetPool;
     }
 
-    private void ShooterPhase()
-    {
-        SetPool();
-    }
-    void SetPool()
+    private void SetPool()
     {
         FillStack(100);
     }
 
     public void Fire()
     {
-        if (isTriple)
+        if (_tripleShot)
         {
-            var stackBullet = GetBullet().transform;
-            
-            stackBullet.position = bulletPoint.position;
-            bulletLastPos = Quaternion.Euler(0,0,0) *(transform.position + Vector3.forward * bulletRange);
-            var tempBullet = stackBullet;
-            stackBullet.DOMove(bulletLastPos, 3f).OnComplete(() => { ReleaseBullet(tempBullet.gameObject); });
-            
-             stackBullet = GetBullet().transform;
-            stackBullet.position = bulletPoint.position;
-            bulletLastPos = Quaternion.Euler(0,30,0) *(transform.position + Vector3.forward * bulletRange);
-             var tempBullet2 = stackBullet;
-             stackBullet.transform.DOMove(bulletLastPos, 3f).OnComplete(() => { ReleaseBullet(tempBullet2.gameObject); }); 
-             stackBullet = GetBullet().transform;
-            stackBullet.position = bulletPoint.position;
-            bulletLastPos = Quaternion.Euler(0,-30,0) *(transform.position + Vector3.forward * bulletRange);
-            stackBullet.DOMove(bulletLastPos, 3f).OnComplete(() => { ReleaseBullet(stackBullet.gameObject); });
-           
+            var stackBullet = GetBullet().GetComponent<BaseAmmo>();
+            stackBullet.info = bullet;
+            stackBullet.AmmoFired(bulletPoint.position, bulletRange, 0, bulletScale);
+
+            var stackBullet1 = GetBullet().GetComponent<BaseAmmo>();
+            stackBullet1.info = bullet;
+            stackBullet1.AmmoFired(bulletPoint.position, bulletRange, 5, bulletScale);
+
+            var stackBullet2 = GetBullet().GetComponent<BaseAmmo>();
+            stackBullet2.info = bullet;
+            stackBullet2.AmmoFired(bulletPoint.position, bulletRange, -5, bulletScale);
         }
         else
         {
-            var stackBullet = GetBullet();
-            stackBullet.transform.position = bulletPoint.position;
-            stackBullet.transform.SetParent(bulletPoint);
-            var lastPoint = Quaternion.Euler(0,0,0) *(transform.position + Vector3.forward * bulletRange);
-            stackBullet.transform.DOMove(lastPoint, 3f).OnComplete(() => { ReleaseBullet(stackBullet.gameObject); });
+            var stackBullet = GetBullet().GetComponent<BaseAmmo>();
+            stackBullet.info = bullet;
+
+            stackBullet.AmmoFired(bulletPoint.position, bulletRange, 0, bulletScale);
         }
-        
     }
 
-    public void FillStack(int amount)
+    private void FillStack(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject obj = Instantiate(bullet.prefab, bulletPoint, true);
-            obj.GetComponent<Bullet>().onGun = true;
+            BaseAmmo obj = Instantiate(bullet.prefab, bulletPoint, true).GetComponent<BaseAmmo>();
             ReleaseBullet(obj);
         }
     }
 
-    public GameObject GetBullet()
+    private GameObject GetBullet()
     {
         if (bulletPool.Count > 0)
         {
-            GameObject obje = bulletPool.Pop().gameObject;
-            obje.gameObject.SetActive(true);
+            GameObject obj = bulletPool.Pop().gameObject;
+            obj.gameObject.SetActive(true);
 
-            return obje;
+            return obj;
         }
 
-        var temp = Instantiate(bullet.prefab);
-        temp.GetComponent<Bullet>().onGun = true;
+        var temp = Instantiate(bullet.prefab, bulletPoint);
         return temp;
     }
 
-    public void ReleaseBullet(GameObject obje)
+    public void ReleaseBullet(BaseAmmo ammo)
     {
-        obje.gameObject.SetActive(false);
-        bulletPool.Push(obje.GetComponent<Bullet>());
+        bulletPool.Push(ammo);
+        ammo.gameObject.SetActive(false);
     }
 }

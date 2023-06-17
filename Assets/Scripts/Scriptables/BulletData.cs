@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu]
 public class BulletData : ScriptableObject
 {
-    public List<BulletInfo> bulletInfos;
+    public List<AmmoInfo> bulletInfos;
 }

@@ -18,8 +18,10 @@ MonoBehaviour:
     prefab: {fileID: 1756791333161399349, guid: 9738cf3704b8e4817bef8c69e9ee2250,
       type: 3}
     health: 100
+    gun: {fileID: 0}
   - level: 1
     damage: 20
     prefab: {fileID: 1756791333161399349, guid: a6281699875274efd8912a99bfe6c4e2,
       type: 3}
     health: 100
+    gun: {fileID: 0}

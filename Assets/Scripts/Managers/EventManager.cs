@@ -17,18 +17,27 @@ public static class EventManager
     public static Func<bool> IsPointerOverUI;
     #endregion
 
+    public static Action BuyBulletButtonClicked;
+    public static Action ShotButtonClicked;
 
-    public static Action<Bullet> BulletMerged;
-    public static Action<Bullet> BulletCarried;
+    public static Action<BaseAmmo> BulletMerged;
+    public static Action<BaseAmmo> BulletCarried;
     public static Func<List<Transform>> GetGunPoints;
     public static Action<Gun> BulletHitGun;
     public static Action<float,float> ReleaseBullets;
     public static Action ShooterPhase;
     public static Action Fire;
-    public static Action<int> PlayerHitRangeGate;
-    public static Action<int> PlayerHitFireRateGate;
+    public static Action<float> PlayerHitRangeGate;
+    public static Action<float> PlayerHitFireRateGate;
     public static Action PlayerHitTripleShotGate;
     public static Action PlayerHitBulletSizeUpGate;
+    public static Action<GameStates> ChangeGameState;
+    public static Action<bool> CanPlayerMove;
+    public static Action<LevelEndBox> LevelEndBoxDestroyed;
+
+    public static Action<int> GoldCollected;
+
+    public static Action BulletSold;
 
 
 

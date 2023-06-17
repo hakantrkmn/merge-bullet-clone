@@ -9,7 +9,7 @@ public class MergeCellController : MonoBehaviour
     public Collider collider;
     public float Bound => collider.bounds.size.x;
 
-    public Bullet cellBullet;
+    public BaseAmmo cellBullet;
 
     public Transform bulletPosition;
 
@@ -27,7 +27,7 @@ public class MergeCellController : MonoBehaviour
         EventManager.BulletCarried -= BulletCarried;
     }
     
-    private void BulletMerged(Bullet bullet)
+    private void BulletMerged(BaseAmmo bullet)
     {
         if (bullet != cellBullet) return;
         
@@ -35,19 +35,24 @@ public class MergeCellController : MonoBehaviour
         haveBullet = false;
     }
 
-    private void BulletCarried(Bullet bullet)
+    private void BulletCarried(BaseAmmo bullet)
     {
         if (bullet == cellBullet)
             haveBullet = false;
     }
 
-    public void SpawnBullet(BulletInfo bulletInfo)
+    public void SpawnBullet(AmmoInfo bulletInfo,bool load)
     {
         var bullet = Instantiate(bulletInfo.prefab, transform, true);
         bullet.transform.position = bulletPosition.position;
-        cellBullet = bullet.GetComponent<Bullet>();
+        cellBullet = bullet.GetComponent<BaseAmmo>();
         cellBullet.info = bulletInfo;
         haveBullet = true;
+        
+        if (load) return;
+        Scriptable.GameData().bullets.Add(bulletInfo);
+        SaveManager.SaveGameData(Scriptable.GameData());
+
     }
 
     public void CarryBackBullet()
@@ -55,19 +60,22 @@ public class MergeCellController : MonoBehaviour
         cellBullet.transform.DOMove(bulletPosition.position, .5f);
     }
 
- 
+    
 
-
-    public bool MergeBullets(Bullet bullet)
+    public bool MergeBullets(BaseAmmo bullet)
     {
         if (haveBullet)
         {
             if (cellBullet.info.level != bullet.info.level) return false;
-            
+
+            Scriptable.GameData().bullets.Remove(cellBullet.info);
+            Scriptable.GameData().bullets.Remove(bullet.info);
+
             var bulletInfo = Scriptable.BulletData().bulletInfos[bullet.info.level + 1];
+
             EventManager.BulletMerged(bullet);
             Destroy(cellBullet.gameObject);
-            SpawnBullet(bulletInfo);
+            SpawnBullet(bulletInfo,false);
             
             return true;
 
@@ -83,6 +91,6 @@ public class MergeCellController : MonoBehaviour
         bullet.SetParent(transform);
         haveBullet = true;
         bullet.position = bulletPosition.position;
-        cellBullet = bullet.GetComponent<Bullet>();
+        cellBullet = bullet.GetComponent<BaseAmmo>();
     }
 }

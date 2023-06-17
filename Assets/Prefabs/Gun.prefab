@@ -80,9 +80,11 @@ MonoBehaviour:
     damage: 0
     prefab: {fileID: 0}
     health: 0
+    gun: {fileID: 0}
   bulletPoint: {fileID: 2906582280643895065}
+  isTriple: 0
   bulletScale: {x: 1, y: 1, z: 1}
-  bulletRange: 2
+  bulletRange: 10
 --- !u!1 &4691337561825876306
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,68 +1,21 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
-
-[Serializable]
-public struct TutorialPanels
-{
-    public TutorialTypes panelName;
-    public GameObject panelGameObject;
-}
 
 
 [Serializable]
-public struct BulletInfo
+public struct AmmoInfo
 {
     public int level;
     public int damage;
     public GameObject prefab;
     public int health;
-}
-
-
-
-
-#region Incremental Idle
-[Serializable]
-public class IncrementalIdleValues
-{
-    public int currentUpgradeLevel;
-    public float totalUpgradeGainValue;
-    public bool isMaximized;
-
-    public void ResetValues()
-    {
-        currentUpgradeLevel = 0;
-        totalUpgradeGainValue = 0;
-        isMaximized = false;
-    }
+    public Gun gun;
 }
 
 [Serializable]
-public class PriceHolderStruct
+public class BulletPrice
 {
-    public string name;
-    public List<PriceAnodValue> priceAndValueList = new List<PriceAnodValue>();
-
-    public PriceHolderStruct(string _name, int _length, int _multiplier)
-    {
-        name = _name;
-
-        for (int i = 0; i < _length; i++)
-            priceAndValueList.Add(new PriceAnodValue((i + 1) * _multiplier, (i + 1)));
-    }
+    public int price;
+    public bool isReached;
 }
 
-[Serializable]
-public class PriceAnodValue
-{
-    public int requiredMoneyValue;
-    public float upgradeAmount;
-
-    public PriceAnodValue(int _requiredMoneyValue, float _upgradeAmount)
-    {
-        this.requiredMoneyValue = _requiredMoneyValue;
-        this.upgradeAmount = _upgradeAmount;
-    }
-}
-#endregion

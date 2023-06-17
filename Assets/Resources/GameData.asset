@@ -12,19 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb7209e3d961de449c14847baf3024b, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  fakeLevelIndex: 1
-  realLevelIndex: 0
-  levelLoopValue: 1
-  finiteTutorial: 0
-  tutorialLevelCount: 3
-  totalMoneyAmount: 0
-  upgradeValues:
-  - currentUpgradeLevel: 0
-    totalUpgradeGainValue: 0
-    isMaximized: 0
-  - currentUpgradeLevel: 0
-    totalUpgradeGainValue: 0
-    isMaximized: 0
-  - currentUpgradeLevel: 0
-    totalUpgradeGainValue: 0
-    isMaximized: 0
+  totalMoneyAmount: 300
+  bulletPrices:
+  - price: 100
+    isReached: 1
+  - price: 200
+    isReached: 0
+  - price: 300
+    isReached: 0
+  - price: 400
+    isReached: 0
+  - price: 500
+    isReached: 0
+  - price: 600
+    isReached: 0
+  - price: 700
+    isReached: 0
+  bullets:
+  - level: 0
+    damage: 10
+    prefab: {fileID: 1756791333161399349, guid: 9738cf3704b8e4817bef8c69e9ee2250,
+      type: 3}
+    health: 100
+    gun: {fileID: 0}

@@ -7,25 +7,49 @@ public class PlayerInteraction : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<GateController>())
+        if (other.GetComponentInParent<BaseGate>() as GateWithAmount)
         {
-            switch (other.GetComponent<GateController>().type)
+            var temp = other.GetComponentInParent<BaseGate>() as GateWithAmount;
+            switch (temp.type)
+                {
+                    case GateWithAmountType.Range:
+                        EventManager.PlayerHitRangeGate(temp.amount);
+                        Destroy(other.GetComponentInParent<GateWithAmount>().gameObject);
+                        break;
+                    case GateWithAmountType.FireRate:
+                        EventManager.PlayerHitFireRateGate(temp.amount);
+                        Destroy(other.GetComponentInParent<GateWithAmount>().gameObject);
+                        break;
+                }
+        }
+        if (other.GetComponentInParent<BaseGate>() as GateWithOutAmount)
+        {
+            var temp = other.GetComponentInParent<BaseGate>() as GateWithOutAmount;
+            switch (other.GetComponentInParent<GateWithOutAmount>().type)
             {
-                case GateType.Range:
-                    Debug.Log("klsndfşnkdfg");
-                    EventManager.PlayerHitRangeGate(other.GetComponent<GateController>().amount);
-                    break;
-                case GateType.FireRate:
-                    EventManager.PlayerHitFireRateGate(other.GetComponent<GateController>().amount);
-                    break;
-                case GateType.TripleShot:
+                case GateWithOutAmountType.TripleShot:
                     EventManager.PlayerHitTripleShotGate();
+                    Destroy(other.GetComponentInParent<GateWithOutAmount>().gameObject);
                     break;
-                case GateType.BulletSizeUp:
+                case GateWithOutAmountType.BulletSizeUp:
                     EventManager.PlayerHitBulletSizeUpGate();
+                    Destroy(other.GetComponentInParent<GateWithOutAmount>().gameObject);
                     break;
-                    
             }
+        }
+
+        if (other.GetComponentInParent<Obstacle>())
+        {
+            EventManager.ChangeGameState(GameStates.Fail);
+        }
+        if (other.GetComponentInParent<Missile>())
+        {
+            EventManager.ChangeGameState(GameStates.Fail);
+        }
+        if (other.GetComponent<Gold>())
+        {
+            EventManager.GoldCollected(other.GetComponent<Gold>().goldAmount);
+            Destroy(other.gameObject);
         }
     }
 }

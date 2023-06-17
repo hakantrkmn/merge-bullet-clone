@@ -17,10 +17,10 @@ public class GunsManager : MonoBehaviour
     public void SetGunPoints()
     {
         var points = EventManager.GetGunPoints();
-        for (int i = 0; i < points.Count; i++)
+        foreach (var point in points)
         {
             var gun = Instantiate(gunPrefab, transform);
-            gun.transform.position = new Vector3(points[i].position.x, transform.position.y, transform.position.z);
+            gun.transform.position = new Vector3(point.position.x, transform.position.y, transform.position.z);
         }
     }
 }
