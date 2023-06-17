@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -19,6 +20,15 @@ public static class EventManager
 
     public static Action<Bullet> BulletMerged;
     public static Action<Bullet> BulletCarried;
+    public static Func<List<Transform>> GetGunPoints;
+    public static Action<Gun> BulletHitGun;
+    public static Action<float,float> ReleaseBullets;
+    public static Action ShooterPhase;
+    public static Action Fire;
+    public static Action<int> PlayerHitRangeGate;
+    public static Action<int> PlayerHitFireRateGate;
+    public static Action PlayerHitTripleShotGate;
+    public static Action PlayerHitBulletSizeUpGate;
 
 
 

@@ -12,6 +12,14 @@ public enum MergeAreaStates
     BulletOnDrag,
     BulletPlaced
 }
+
+public enum GateType
+{
+    FireRate,
+    Range,
+    TripleShot,
+    BulletSizeUp
+}
 public enum InGamePanelTypes
 {
     OnlyLevel,

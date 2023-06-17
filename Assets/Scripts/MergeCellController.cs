@@ -55,6 +55,8 @@ public class MergeCellController : MonoBehaviour
         cellBullet.transform.DOMove(bulletPosition.position, .5f);
     }
 
+ 
+
 
     public bool MergeBullets(Bullet bullet)
     {

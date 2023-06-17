@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class MergeAreaController : MonoBehaviour
@@ -9,7 +10,7 @@ public class MergeAreaController : MonoBehaviour
     public LayerMask cellLayer;
     public LayerMask groundLayer;
     public MergeAreaStates state;
-
+    public Transform gunsPosition;
     Transform _carryBullet;
     MergeCellController _carryCell;
 
@@ -88,11 +89,23 @@ public class MergeAreaController : MonoBehaviour
         
     }
 
+    void ReleaseBullets()
+    {
+        Sequence release = DOTween.Sequence();
+        release.AppendCallback(() => EventManager.ReleaseBullets(gunsPosition.position.z, 3));
+        release.AppendInterval(3);
+        release.AppendCallback(() => EventManager.ShooterPhase());
+        
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CreateBullet();
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            ReleaseBullets();
         }
 
         switch (state)

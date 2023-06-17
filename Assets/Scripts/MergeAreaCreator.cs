@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -11,6 +12,29 @@ public class MergeAreaCreator : MonoBehaviour
     public float padding;
 
     public List<MergeCellController> cells;
+
+
+    private void OnEnable()
+    {
+        EventManager.GetGunPoints += GetGunPoints;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.GetGunPoints -= GetGunPoints;
+    }
+
+    private List<Transform> GetGunPoints()
+    {
+        List<Transform> tempList = new List<Transform>();
+        for (int i = 0; i < gridSize.x; i++)
+        {
+            tempList.Add(cells[i].transform);
+        }
+
+        return tempList;
+    }
+
     [Button]
     public void CreateMergeArea()
     {
