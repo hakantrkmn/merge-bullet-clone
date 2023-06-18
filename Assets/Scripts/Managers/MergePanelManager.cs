@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,38 +31,19 @@ public class MergePanelManager : MonoBehaviour
     void CheckIfCanShot()
     {
         var bullets = Scriptable.GameData().bullets;
-        if (bullets.Count>0)
-        {
-            shotButton.interactable = true;
-        }
-        else
-        {
-            shotButton.interactable = false;
-
-        }
-
+        shotButton.interactable = bullets.Count>0;
     }
 
     private void CheckIfCanBuyBullet()
     {
+        shotButton.interactable = true;
         _moneyAmount = Scriptable.GameData().totalMoneyAmount;
         var priceList = Scriptable.GameData().bulletPrices;
-        foreach (var price in priceList)
+        foreach (var price in priceList.Where(price => !price.isReached))
         {
-            if (!price.isReached)
-            {
-                priceText.text = price.price.ToString();
-                if (_moneyAmount>=price.price)
-                {
-                    buyBulletButton.interactable = true;
-                }
-                else
-                {
-                    buyBulletButton.interactable = false;
-
-                }
-                return;
-            }
+            priceText.text = price.price.ToString();
+            buyBulletButton.interactable = _moneyAmount>=price.price;
+            return;
         }
         
     }

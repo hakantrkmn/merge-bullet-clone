@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -30,50 +28,31 @@ public abstract class BaseAmmo : MonoBehaviour
         info.gun = gun;
         gun.bullet = info;
         EventManager.BulletHitGun(gun);
-        
+
         Destroy(gameObject);
     }
 
-    protected virtual void AmmoHitGate(BaseGate gate)
-    {
-        _movement.Kill();
-        gate.IncreaseAmount();
-        info.gun.ReleaseBullet(this);
 
-    }
-    
-    protected virtual void AmmoHitLevelEndBox(LevelEndBox box)
-    {
-        box.TakeDamage(info.damage);
-        _movement.Kill();
-        info.gun.ReleaseBullet(this);
-
-    }
-    
-    public virtual void AmmoFired(Vector3 startPos,float range,float angle,Vector3 scale)
+    public virtual void AmmoFired(Vector3 startPos, float range, float angle, Vector3 scale)
     {
         transform.position = startPos;
-        var destination = Quaternion.Euler(0,angle,0) *(transform.position + (Vector3.forward * range));
+        var destination = Quaternion.Euler(0, angle, 0) * (transform.position + (Vector3.forward * range));
         transform.localScale = scale;
-        _movement = transform.DOMove(destination, 10).SetSpeedBased().OnComplete(() =>
-        {
-            info.gun.ReleaseBullet(this);
-        });
+        _movement = transform.DOMove(destination, 15).SetSpeedBased()
+            .OnComplete(() => { info.gun.ReleaseBullet(this); });
     }
-    
-    protected virtual void AmmoHitObstacle(Obstacle obstacle)
+
+
+    protected virtual void DestroyAmmo<T>(T hitObject)
     {
+        (hitObject as BaseGate)?.IncreaseAmount();
+
+        (hitObject as LevelEndBox)?.TakeDamage(info.damage);
+        
         _movement.Kill();
         info.gun.ReleaseBullet(this);
-
     }
-    protected virtual void AmmoHitMissile()
-    {
-        _movement.Kill();
-        info.gun.ReleaseBullet(this);
 
-    }
-    
     protected virtual void AmmoHitWall(Wall wall)
     {
         info.health -= wall.damage;
@@ -82,13 +61,11 @@ public abstract class BaseAmmo : MonoBehaviour
         if (info.health > 0) return;
         _movement.Kill();
         Destroy(gameObject);
-
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<Gun>() && info.gun==null)
+        if (other.GetComponentInParent<Gun>() && info.gun == null)
         {
             AmmoHitGun(other.GetComponentInParent<Gun>());
             return;
@@ -96,27 +73,31 @@ public abstract class BaseAmmo : MonoBehaviour
 
         if (other.GetComponentInParent<BaseGate>())
         {
-            AmmoHitGate(other.GetComponentInParent<BaseGate>());
+            DestroyAmmo(other.GetComponentInParent<BaseGate>());
             return;
         }
+
         if (other.GetComponentInParent<Wall>())
         {
             AmmoHitWall(other.GetComponentInParent<Wall>());
             return;
         }
+
         if (other.GetComponentInParent<LevelEndBox>())
         {
-            AmmoHitLevelEndBox(other.GetComponentInParent<LevelEndBox>());
+            DestroyAmmo(other.GetComponentInParent<LevelEndBox>());
             return;
         }
+
         if (other.GetComponentInParent<Obstacle>())
         {
-            AmmoHitObstacle(other.GetComponentInParent<Obstacle>());
+            DestroyAmmo(other.GetComponentInParent<Obstacle>());
             return;
         }
+
         if (other.GetComponentInParent<Missile>())
         {
-            AmmoHitMissile();
+            DestroyAmmo(other.GetComponentInParent<Missile>());
             return;
         }
     }

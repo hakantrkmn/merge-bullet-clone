@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI moneyText;
-    private int moneyAmount;
+    private int _moneyAmount;
     public CanvasGroup mergePanel;
     public CanvasGroup winPanel;
     public CanvasGroup failPanel;
@@ -48,10 +49,10 @@ public class UIManager : MonoBehaviour
 
     private void GoldCollected(int amount)
     {
-        moneyAmount += amount;
-        Scriptable.GameData().totalMoneyAmount=moneyAmount;
+        _moneyAmount += amount;
+        Scriptable.GameData().totalMoneyAmount=_moneyAmount;
         SaveManager.SaveGameData(Scriptable.GameData());
-        moneyText.text = moneyAmount.ToString();
+        moneyText.text = _moneyAmount.ToString();
     }
 
     private void OnDisable()
@@ -66,16 +67,13 @@ public class UIManager : MonoBehaviour
     private void BuyBulletButtonClicked()
     {
         var priceList = Scriptable.GameData().bulletPrices;
-        foreach (var price in priceList)
+        foreach (var price in priceList.Where(price => !price.isReached))
         {
-            if (!price.isReached)
-            {
-                price.isReached = true;
-                Scriptable.GameData().totalMoneyAmount -= price.price;
-                SaveManager.SaveGameData(Scriptable.GameData());
-                EventManager.BulletSold();
-                return;
-            }
+            price.isReached = true;
+            Scriptable.GameData().totalMoneyAmount -= price.price;
+            SaveManager.SaveGameData(Scriptable.GameData());
+            EventManager.BulletSold();
+            return;
         }
     }
 
@@ -84,9 +82,9 @@ public class UIManager : MonoBehaviour
         UpdateMoney();
     }
 
-    public void UpdateMoney()
+    private void UpdateMoney()
     {
-        moneyAmount = Scriptable.GameData().totalMoneyAmount;
-        moneyText.text = moneyAmount.ToString();
+        _moneyAmount = Scriptable.GameData().totalMoneyAmount;
+        moneyText.text = _moneyAmount.ToString();
     }
 }

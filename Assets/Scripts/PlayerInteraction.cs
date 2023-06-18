@@ -29,15 +29,15 @@ public class PlayerInteraction : MonoBehaviour
         if (other.GetComponentInParent<BaseGate>() as GateWithOutAmount)
         {
             var temp = other.GetComponentInParent<BaseGate>() as GateWithOutAmount;
-            switch (other.GetComponentInParent<GateWithOutAmount>().type)
+            switch (temp.type)
             {
                 case GateWithOutAmountType.TripleShot:
                     EventManager.PlayerHitTripleShotGate();
-                    Destroy(other.GetComponentInParent<GateWithOutAmount>().gameObject);
+                    Destroy(temp.gameObject);
                     break;
                 case GateWithOutAmountType.BulletSizeUp:
                     EventManager.PlayerHitBulletSizeUpGate();
-                    Destroy(other.GetComponentInParent<GateWithOutAmount>().gameObject);
+                    Destroy(temp.gameObject);
                     break;
             }
         }

@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour
 {
     public AmmoInfo bullet;
     public Transform bulletPoint;
-    private Stack<BaseAmmo> bulletPool = new Stack<BaseAmmo>();
+    private Stack<BaseAmmo> _bulletPool = new Stack<BaseAmmo>();
 
 
     bool _tripleShot;
@@ -62,6 +62,8 @@ public class Gun : MonoBehaviour
         }
     }
 
+    #region Object Pool
+
     private void FillStack(int amount)
     {
         for (int i = 0; i < amount; i++)
@@ -73,9 +75,9 @@ public class Gun : MonoBehaviour
 
     private GameObject GetBullet()
     {
-        if (bulletPool.Count > 0)
+        if (_bulletPool.Count > 0)
         {
-            GameObject obj = bulletPool.Pop().gameObject;
+            GameObject obj = _bulletPool.Pop().gameObject;
             obj.gameObject.SetActive(true);
 
             return obj;
@@ -87,7 +89,11 @@ public class Gun : MonoBehaviour
 
     public void ReleaseBullet(BaseAmmo ammo)
     {
-        bulletPool.Push(ammo);
+        _bulletPool.Push(ammo);
         ammo.gameObject.SetActive(false);
     }
+    
+
+    #endregion
+   
 }

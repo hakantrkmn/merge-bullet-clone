@@ -27,6 +27,6 @@ public class GateWithAmount : BaseGate
     public override void IncreaseAmount()
     {
         amount++;
-        amountText.text = amount > 0 ? "+" + amount.ToString() : "-" + amount.ToString();
+        amountText.text = amount > 0 ? "+" + amount : amount.ToString();
     }
 }

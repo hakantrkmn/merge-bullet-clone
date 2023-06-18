@@ -32,9 +32,7 @@ public class PlayerController : MonoBehaviour
     private void BulletHitGun(Gun gun)
     {
         if (!_guns.Contains(gun))
-        {
             _guns.Add(gun);
-        }
         else
         {
             var tempGun = _guns.Find((x) => x.bullet.prefab == gun.bullet.prefab);
@@ -47,7 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         state = obj;
 
-        if (state == GameStates.Fail)
+        if (state == GameStates.Fail || state==GameStates.Win)
             EventManager.CanPlayerMove(false);
     }
 

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -12,7 +9,7 @@ public class MergeAreaController : MonoBehaviour
     MergeAreaStates _state;
     public Transform gunsPosition;
 
-    Transform _carryBullet;
+    BaseAmmo _carryBullet;
     MergeCellController _carryCell;
 
 
@@ -25,7 +22,7 @@ public class MergeAreaController : MonoBehaviour
     {
         var loadData = Scriptable.GameData().bullets;
         foreach (var data in loadData)
-            CreateBullet(data.level,data.index);
+            CreateBullet(data.level, data.index);
     }
 
     private void OnEnable()
@@ -47,10 +44,11 @@ public class MergeAreaController : MonoBehaviour
         emptyCell.SpawnBullet(bullet, false);
     }
 
-    private void CreateBullet(int level,Vector2 index)
+    private void CreateBullet(int level, Vector2 index)
     {
         var bullet = Scriptable.BulletData().bulletInfos[level];
-        mergeAreaCreator.cells[(int)index.x+((int)index.y*(int)mergeAreaCreator.gridSize.x)].SpawnBullet(bullet, true);
+        mergeAreaCreator.cells[(int)index.x + ((int)index.y * (int)mergeAreaCreator.gridSize.x)]
+            .SpawnBullet(bullet, true);
     }
 
     private void ChooseBulletToDrag()
@@ -58,15 +56,14 @@ public class MergeAreaController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, cellLayer))
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, cellLayer))
             {
-                if (hit.transform.GetComponent<MergeCellController>().haveBullet)
-                {
-                    _carryBullet = hit.transform.GetComponent<MergeCellController>().cellBullet.transform;
-                    _carryCell = hit.transform.GetComponent<MergeCellController>();
-                    _state = MergeAreaStates.BulletOnDrag;
-                }
+                var cell = hit.transform.GetComponent<MergeCellController>();
+                if (!cell.haveBullet) return;
+
+                _carryBullet = cell.cellBullet;
+                _carryCell = cell;
+                _state = MergeAreaStates.BulletOnDrag;
             }
         }
     }
@@ -77,9 +74,7 @@ public class MergeAreaController : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, groundLayer))
-            {
                 _carryBullet.transform.position = hit.point + Vector3.up;
-            }
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -101,10 +96,10 @@ public class MergeAreaController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit, Mathf.Infinity, cellLayer))
         {
-            if (hit.transform.GetComponent<MergeCellController>() != _carryCell)
+            var cell = hit.transform.GetComponent<MergeCellController>();
+            if (cell != _carryCell)
             {
-                if (hit.transform.GetComponent<MergeCellController>()
-                    .MergeBullets(_carryBullet.GetComponent<BaseAmmo>(),_carryCell._cellIndex)) return;
+                if (cell.MergeBullets(_carryBullet, _carryCell._cellIndex)) return;
 
                 CarryBackBullet();
             }
@@ -119,7 +114,7 @@ public class MergeAreaController : MonoBehaviour
         }
     }
 
-    void ReleaseBullets()
+    private void ReleaseBullets()
     {
         Sequence release = DOTween.Sequence();
         release.AppendCallback(() => EventManager.ReleaseBullets(gunsPosition.position.z, 2));

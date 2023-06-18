@@ -5,40 +5,40 @@ using UnityEngine;
 
 public class LevelEndController : MonoBehaviour
 {
-    public LevelEndCreator levelEndCreator;
     public List<LevelEndBox> destroyedBoxes;
     public Transform highScore;
 
     private void OnEnable()
     {
         EventManager.ChangeGameState += ChangeGameState;
-        EventManager.LevelEndBoxDestroyed+= LevelEndBoxDestroyed;   
+        EventManager.LevelEndBoxDestroyed += LevelEndBoxDestroyed;
     }
 
     private void Start()
     {
-        highScore.position = new Vector3(highScore.position.x, highScore.position.y, Scriptable.GameData().highScoreZPos);
+        highScore.localPosition =
+            new Vector3(highScore.localPosition.x, highScore.localPosition.y, Scriptable.GameData().highScoreZPos);
     }
 
     private void ChangeGameState(GameStates state)
     {
-        if (state==GameStates.Win)
+        if (state != GameStates.Win) return;
+        
+        var lastBox = destroyedBoxes[0].transform.localPosition.z;
+        foreach (var box in destroyedBoxes)
         {
-            var lastBox = destroyedBoxes[0].transform.position.z;
-            foreach (var box in destroyedBoxes)
+            if (box.transform.localPosition.z > lastBox)
             {
-                if (box.transform.position.z > lastBox)
-                {
-                    lastBox = box.transform.position.z;
-                }
+                lastBox = box.transform.localPosition.z;
             }
+        }
 
-            if (lastBox>highScore.position.z)
-            {
-                Scriptable.GameData().highScoreZPos = lastBox;
-                highScore.position = new Vector3(highScore.position.x, highScore.position.y, Scriptable.GameData().highScoreZPos);
-                SaveManager.SaveGameData(Scriptable.GameData());
-            }
+        if (lastBox > highScore.localPosition.z)
+        {
+            Scriptable.GameData().highScoreZPos = lastBox;
+            highScore.localPosition = new Vector3(highScore.localPosition.x, highScore.localPosition.y, 
+                Scriptable.GameData().highScoreZPos);
+            SaveManager.SaveGameData(Scriptable.GameData());
         }
     }
 
@@ -46,7 +46,7 @@ public class LevelEndController : MonoBehaviour
     private void OnDisable()
     {
         EventManager.ChangeGameState -= ChangeGameState;
-        EventManager.LevelEndBoxDestroyed-= LevelEndBoxDestroyed;   
+        EventManager.LevelEndBoxDestroyed -= LevelEndBoxDestroyed;
     }
 
     private void LevelEndBoxDestroyed(LevelEndBox box)
