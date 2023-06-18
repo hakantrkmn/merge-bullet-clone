@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb7209e3d961de449c14847baf3024b, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  totalMoneyAmount: 300
+  totalMoneyAmount: 0
   bulletPrices:
   - price: 100
-    isReached: 1
+    isReached: 0
   - price: 200
     isReached: 0
   - price: 300
@@ -28,10 +28,13 @@ MonoBehaviour:
     isReached: 0
   - price: 700
     isReached: 0
-  bullets:
-  - level: 0
-    damage: 10
-    prefab: {fileID: 1756791333161399349, guid: 9738cf3704b8e4817bef8c69e9ee2250,
-      type: 3}
-    health: 100
-    gun: {fileID: 0}
+  - price: 0
+    isReached: 0
+  - price: 0
+    isReached: 0
+  - price: 0
+    isReached: 0
+  - price: 0
+    isReached: 0
+  bullets: []
+  highScoreZPos: 80.1

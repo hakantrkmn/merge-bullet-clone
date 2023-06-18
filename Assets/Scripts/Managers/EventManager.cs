@@ -17,8 +17,14 @@ public static class EventManager
     public static Func<bool> IsPointerOverUI;
     #endregion
 
+    public static Action<Vector2> RemoveBulletFromData;
+    public static Action<Vector2,Vector2> ChangeBulletFromData;
+
+    
     public static Action BuyBulletButtonClicked;
     public static Action ShotButtonClicked;
+    public static Action NextLevelButtonClicked;
+    public static Action TryAgainButtonClicked;
 
     public static Action<BaseAmmo> BulletMerged;
     public static Action<BaseAmmo> BulletCarried;

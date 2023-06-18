@@ -25,7 +25,7 @@ public class MergeAreaController : MonoBehaviour
     {
         var loadData = Scriptable.GameData().bullets;
         foreach (var data in loadData)
-            CreateBullet(data.level);
+            CreateBullet(data.level,data.index);
     }
 
     private void OnEnable()
@@ -47,11 +47,10 @@ public class MergeAreaController : MonoBehaviour
         emptyCell.SpawnBullet(bullet, false);
     }
 
-    private void CreateBullet(int level)
+    private void CreateBullet(int level,Vector2 index)
     {
         var bullet = Scriptable.BulletData().bulletInfos[level];
-        var emptyCell = mergeAreaCreator.GetEmptyCell();
-        emptyCell.SpawnBullet(bullet, true);
+        mergeAreaCreator.cells[(int)index.x+((int)index.y*(int)mergeAreaCreator.gridSize.x)].SpawnBullet(bullet, true);
     }
 
     private void ChooseBulletToDrag()
@@ -105,7 +104,7 @@ public class MergeAreaController : MonoBehaviour
             if (hit.transform.GetComponent<MergeCellController>() != _carryCell)
             {
                 if (hit.transform.GetComponent<MergeCellController>()
-                    .MergeBullets(_carryBullet.GetComponent<BaseAmmo>())) return;
+                    .MergeBullets(_carryBullet.GetComponent<BaseAmmo>(),_carryCell._cellIndex)) return;
 
                 CarryBackBullet();
             }

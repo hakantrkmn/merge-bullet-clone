@@ -10,10 +10,11 @@ public class MergePanelManager : MonoBehaviour
     private int _moneyAmount;
     public Button buyBulletButton;
     public TextMeshProUGUI priceText;
-
+    public Button shotButton;
     private void Start()
     {
         CheckIfCanBuyBullet();
+        CheckIfCanShot();
     }
 
     private void OnEnable()
@@ -24,6 +25,21 @@ public class MergePanelManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.BulletSold -= CheckIfCanBuyBullet;
+    }
+
+    void CheckIfCanShot()
+    {
+        var bullets = Scriptable.GameData().bullets;
+        if (bullets.Count>0)
+        {
+            shotButton.interactable = true;
+        }
+        else
+        {
+            shotButton.interactable = false;
+
+        }
+
     }
 
     private void CheckIfCanBuyBullet()

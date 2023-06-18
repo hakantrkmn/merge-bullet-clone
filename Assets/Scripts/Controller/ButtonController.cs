@@ -16,6 +16,12 @@ public class ButtonController : MonoBehaviour
             case ButtonTypes.Shot:
                 EventManager.ShotButtonClicked();
                 break;
+            case ButtonTypes.NextLevel:
+                EventManager.NextLevelButtonClicked();
+                break;
+            case ButtonTypes.TryAgain:
+                EventManager.TryAgainButtonClicked();
+                break;
         }
     }
 }

@@ -21,11 +21,12 @@ public abstract class BaseAmmo : MonoBehaviour
 
     protected virtual void ReleaseBullets(float zPoint, float time)
     {
-        transform.DOMoveZ(zPoint, time);
+        _movement = transform.DOMoveZ(zPoint, time);
     }
 
     protected virtual void AmmoHitGun(Gun gun)
     {
+        _movement.Kill();
         info.gun = gun;
         gun.bullet = info;
         EventManager.BulletHitGun(gun);

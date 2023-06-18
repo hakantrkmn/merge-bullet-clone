@@ -9,7 +9,14 @@ public struct AmmoInfo
     public int damage;
     public GameObject prefab;
     public int health;
-    public Gun gun;
+    [HideInInspector]public Gun gun;
+}
+
+[Serializable]
+public class GridAmmoInfo
+{
+    public int level;
+    public Vector2 index;
 }
 
 [Serializable]

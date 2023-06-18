@@ -47,6 +47,7 @@ public class MergeAreaCreator : MonoBehaviour
                 var xStart = ((gridSize.x * gridBound) - (gridBound)) / 2;
                 var yStart = ((gridSize.y * gridBound) - (gridBound)) / 2;
                 cell.transform.localPosition = new Vector3((-xStart + (gridBound * j)), 0, -yStart + (gridBound * i));
+                cell._cellIndex = new Vector2(j, i);
                 cells.Add(cell);
             }
         }

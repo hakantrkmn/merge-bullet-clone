@@ -25,3 +25,15 @@ MonoBehaviour:
       type: 3}
     health: 100
     gun: {fileID: 0}
+  - level: 2
+    damage: 50
+    prefab: {fileID: 1756791333161399349, guid: 30f9416e59c8f4400b6158cd667851bf,
+      type: 3}
+    health: 100
+    gun: {fileID: 0}
+  - level: 3
+    damage: 70
+    prefab: {fileID: 1756791333161399349, guid: 383fe07b9c7364c5da23641266e59b44,
+      type: 3}
+    health: 100
+    gun: {fileID: 0}

@@ -8,14 +8,42 @@ public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI moneyText;
     private int moneyAmount;
-    public GameObject mergePanel;
+    public CanvasGroup mergePanel;
+    public CanvasGroup winPanel;
+    public CanvasGroup failPanel;
 
     private void OnEnable()
     {
+        EventManager.ChangeGameState += ChangeGameState;
         EventManager.GoldCollected += GoldCollected;
-        EventManager.ShotButtonClicked += () => mergePanel.SetActive(false);
+        EventManager.ShotButtonClicked += ShotButtonClicked;
         EventManager.BuyBulletButtonClicked+= BuyBulletButtonClicked;
         EventManager.BulletSold += UpdateMoney;
+    }
+
+    private void ShotButtonClicked()
+    {
+        ChangePanelVisibility(false, mergePanel);
+    }
+
+    private void ChangeGameState(GameStates state)
+    {
+        switch (state)
+        {
+            case GameStates.Fail:
+                ChangePanelVisibility(true, failPanel);
+                break;
+            case GameStates.Win:
+                ChangePanelVisibility(true, winPanel);
+                break;
+        }
+    }
+
+    private void ChangePanelVisibility(bool show,CanvasGroup panel)
+    {
+        panel.interactable = show;
+        panel.alpha = show ? 1 : 0;
+        panel.blocksRaycasts = show;
     }
 
     private void GoldCollected(int amount)
@@ -28,8 +56,9 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventManager.ChangeGameState -= ChangeGameState;
         EventManager.GoldCollected -= GoldCollected;
-        EventManager.ShotButtonClicked -= () => mergePanel.SetActive(false);
+        EventManager.ShotButtonClicked -= ShotButtonClicked;
         EventManager.BulletSold -= UpdateMoney;
         EventManager.BuyBulletButtonClicked-= BuyBulletButtonClicked;
     }

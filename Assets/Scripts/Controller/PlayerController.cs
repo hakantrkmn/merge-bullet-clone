@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
-    GameStates _state;
+    public GameStates state;
     public List<Transform> gunPoints;
     List<Gun> _guns;
 
@@ -44,15 +45,15 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeGameState(GameStates obj)
     {
-        _state = obj;
+        state = obj;
 
-        if (_state == GameStates.Fail)
+        if (state == GameStates.Fail)
             EventManager.CanPlayerMove(false);
     }
 
     private void ShooterPhase()
     {
-        _state = GameStates.MergeToShooter;
+        state = GameStates.MergeToShooter;
 
         for (int i = 0; i < _guns.Count; i++)
         {
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_state != GameStates.Shooter) return;
+        if (state != GameStates.Shooter) return;
 
         if (Input.GetMouseButtonDown(0))
         {

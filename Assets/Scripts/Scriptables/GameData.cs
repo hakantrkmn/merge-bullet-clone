@@ -13,7 +13,9 @@ public class GameData : ScriptableObject
     
     [BoxGroup("Ammo Price")] public List<BulletPrice> bulletPrices;
 
-    [BoxGroup("MergeGridData")] public List<AmmoInfo> bullets;
+    [BoxGroup("MergeGridData")] public List<GridAmmoInfo> bullets;
+
+    public float highScoreZPos;
 
     //---------------------------------------------------------------------------------
     [Button]

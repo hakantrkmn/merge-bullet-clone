@@ -1,7 +1,9 @@
 ﻿public enum ButtonTypes
 {
     BuyBullet,
-    Shot
+    Shot,
+    NextLevel,
+    TryAgain,
 }
 public enum MergeAreaStates
 {
@@ -16,7 +18,8 @@ public enum GameStates
     MergeToShooter,
     Shooter,
     LevelEnd,
-    Fail
+    Fail,
+    Win
 }
 
 public enum GateWithAmountType
