@@ -75,7 +75,7 @@ public class PlayerInteraction : MonoBehaviour
                 haveShield = true;
                 GetComponent<PlayerController>().ShowShield(true);
             }));
-            shield.AppendInterval(3);
+            shield.AppendInterval(other.GetComponent<Shield>().time);
             shield.AppendCallback((() =>
             {
                 GetComponent<PlayerController>().ShowShield(false);

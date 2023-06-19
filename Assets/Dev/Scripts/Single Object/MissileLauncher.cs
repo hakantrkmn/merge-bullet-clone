@@ -11,7 +11,7 @@ public class MissileLauncher : MonoBehaviour
     public GameObject missilePrefab;
     private float _timer;
     private float _spawnTime;
-
+    public Transform missileSpawnPoint;
     private void OnEnable()
     {
         EventManager.ChangeGameState += state => this.state = state;
@@ -47,7 +47,7 @@ public class MissileLauncher : MonoBehaviour
     void SpawnMissile()
     {
         var missile = Instantiate(missilePrefab, transform);
-        missile.transform.position = transform.position;
+        missile.transform.position = missileSpawnPoint.position;
         Destroy(missile,8);
     }
 }
