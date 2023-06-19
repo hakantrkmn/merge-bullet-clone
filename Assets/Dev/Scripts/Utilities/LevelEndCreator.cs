@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelEndCreator : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class LevelEndCreator : MonoBehaviour
                 var gridBound = box.Bound+padding;
                 var xStart = ((gridSize.x * gridBound) - (gridBound)) / 2;
                 box.transform.localPosition = new Vector3((-xStart+(gridBound*j)), 0, (gridBound*i));
+                box.health = (i + 1) * 100;
                 boxes.Add(box);
 
                 

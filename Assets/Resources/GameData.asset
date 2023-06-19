@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb7209e3d961de449c14847baf3024b, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  totalMoneyAmount: 100
+  totalMoneyAmount: 0
   bulletPrices:
   - price: 100
     isReached: 0
@@ -28,13 +28,31 @@ MonoBehaviour:
     isReached: 0
   - price: 700
     isReached: 0
-  - price: 0
+  - price: 800
     isReached: 0
-  - price: 0
+  - price: 900
     isReached: 0
-  - price: 0
+  - price: 1000
     isReached: 0
-  - price: 0
+  - price: 1100
+    isReached: 0
+  - price: 1200
+    isReached: 0
+  - price: 1300
+    isReached: 0
+  - price: 1400
+    isReached: 0
+  - price: 1500
+    isReached: 0
+  - price: 1600
+    isReached: 0
+  - price: 1700
+    isReached: 0
+  - price: 1800
+    isReached: 0
+  - price: 1900
+    isReached: 0
+  - price: 2000
     isReached: 0
   bullets: []
   highScoreZPos: 0

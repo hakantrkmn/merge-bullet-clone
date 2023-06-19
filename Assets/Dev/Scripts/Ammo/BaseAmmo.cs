@@ -5,7 +5,7 @@ public abstract class BaseAmmo : MonoBehaviour
 {
     public AmmoInfo info;
     private Tween _movement;
-
+    public float speed;
     public virtual void OnEnable()
     {
         EventManager.ReleaseBullets += ReleaseBullets;
@@ -38,7 +38,7 @@ public abstract class BaseAmmo : MonoBehaviour
         transform.position = startPos;
         var destination = Quaternion.Euler(0, angle, 0) * (transform.position + (Vector3.forward * range));
         transform.localScale = scale;
-        _movement = transform.DOMove(destination, 15).SetSpeedBased()
+        _movement = transform.DOMove(destination, speed).SetSpeedBased()
             .OnComplete(() => { info.gun.ReleaseBullet(this); });
     }
 

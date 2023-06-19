@@ -47,11 +47,11 @@ public class Gun : MonoBehaviour
 
             var stackBullet1 = GetBullet().GetComponent<BaseAmmo>();
             stackBullet1.info = bullet;
-            stackBullet1.AmmoFired(bulletPoint.position, bulletRange, 5, bulletScale);
+            stackBullet1.AmmoFired(bulletPoint.position, bulletRange, 2, bulletScale);
 
             var stackBullet2 = GetBullet().GetComponent<BaseAmmo>();
             stackBullet2.info = bullet;
-            stackBullet2.AmmoFired(bulletPoint.position, bulletRange, -5, bulletScale);
+            stackBullet2.AmmoFired(bulletPoint.position, bulletRange, -2, bulletScale);
         }
         else
         {

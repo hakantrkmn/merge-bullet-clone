@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -49,10 +50,9 @@ public class UIManager : MonoBehaviour
 
     private void GoldCollected(int amount)
     {
-        _moneyAmount += amount;
-        Scriptable.GameData().totalMoneyAmount=_moneyAmount;
+        Scriptable.GameData().totalMoneyAmount+=amount;
         SaveManager.SaveGameData(Scriptable.GameData());
-        moneyText.text = _moneyAmount.ToString();
+        UpdateMoney();
     }
 
     private void OnDisable()
@@ -84,7 +84,12 @@ public class UIManager : MonoBehaviour
 
     private void UpdateMoney()
     {
+        DOVirtual.Int((int)_moneyAmount, (int)Scriptable.GameData().totalMoneyAmount,.2f, (x) =>
+        {
+            moneyText.text = AbbrevationUtility.AbbreviateNumber(x);
+
+        });
+
         _moneyAmount = Scriptable.GameData().totalMoneyAmount;
-        moneyText.text = _moneyAmount.ToString();
     }
 }

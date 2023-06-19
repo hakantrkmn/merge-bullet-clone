@@ -70,9 +70,17 @@ public class PlayerInteraction : MonoBehaviour
         {
             Destroy(other.gameObject);
             Sequence shield = DOTween.Sequence();
-            shield.AppendCallback((() => haveShield = true));
+            shield.AppendCallback((() =>
+            {
+                haveShield = true;
+                GetComponent<PlayerController>().ShowShield(true);
+            }));
             shield.AppendInterval(3);
-            shield.AppendCallback((() => haveShield = false));
+            shield.AppendCallback((() =>
+            {
+                GetComponent<PlayerController>().ShowShield(false);
+                haveShield = false;
+            }));
         }
     }
 }

@@ -48,5 +48,6 @@ public class MissileLauncher : MonoBehaviour
     {
         var missile = Instantiate(missilePrefab, transform);
         missile.transform.position = transform.position;
+        Destroy(missile,8);
     }
 }

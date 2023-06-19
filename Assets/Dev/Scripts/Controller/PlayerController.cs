@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
 {
     public GameStates state;
     public List<Transform> gunPoints;
-    List<Gun> _guns;
-
+    public List<Gun> _guns;
+    public GameObject shield;
 
     public float fireRate;
     private float timer;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         state = obj;
 
-        if (state == GameStates.Fail || state==GameStates.Win)
+        if (state == GameStates.Fail || state == GameStates.Win)
             EventManager.CanPlayerMove(false);
     }
 
@@ -73,6 +73,10 @@ public class PlayerController : MonoBehaviour
         EventManager.BulletHitGun -= BulletHitGun;
     }
 
+    public void ShowShield(bool show)
+    {
+        shield.SetActive(show);
+    }
 
     void Update()
     {

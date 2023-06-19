@@ -41,7 +41,7 @@ public class MergePanelManager : MonoBehaviour
         var priceList = Scriptable.GameData().bulletPrices;
         foreach (var price in priceList.Where(price => !price.isReached))
         {
-            priceText.text = price.price.ToString();
+            priceText.text = AbbrevationUtility.AbbreviateNumber(price.price);
             buyBulletButton.interactable = _moneyAmount>=price.price;
             return;
         }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8304629278394832049}
   - component: {fileID: 5122348882018760754}
   m_Layer: 0
-  m_Name: Bullet_3
+  m_Name: Bullet_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,6 +67,7 @@ MonoBehaviour:
     prefab: {fileID: 0}
     health: 0
     gun: {fileID: 0}
+  speed: 15
 --- !u!1 &3096220535905801837
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +128,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: caee36c7a0c16414fa0c327837480fa8, type: 2}
+  - {fileID: 2100000, guid: 0fbe5d12b6e36434f9b1807102ca5d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
