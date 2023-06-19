@@ -23,22 +23,25 @@ public class LevelEndController : MonoBehaviour
     private void ChangeGameState(GameStates state)
     {
         if (state != GameStates.Win) return;
-        
-        var lastBox = destroyedBoxes[0].transform.localPosition.z;
-        foreach (var box in destroyedBoxes)
-        {
-            if (box.transform.localPosition.z > lastBox)
-            {
-                lastBox = box.transform.localPosition.z;
-            }
-        }
 
-        if (lastBox > highScore.localPosition.z)
+        if (destroyedBoxes.Count != 0)
         {
-            Scriptable.GameData().highScoreZPos = lastBox;
-            highScore.localPosition = new Vector3(highScore.localPosition.x, highScore.localPosition.y, 
-                Scriptable.GameData().highScoreZPos);
-            SaveManager.SaveGameData(Scriptable.GameData());
+            var lastBox = destroyedBoxes[0].transform.localPosition.z;
+            foreach (var box in destroyedBoxes)
+            {
+                if (box.transform.localPosition.z > lastBox)
+                {
+                    lastBox = box.transform.localPosition.z;
+                }
+            }
+
+            if (lastBox > highScore.localPosition.z)
+            {
+                Scriptable.GameData().highScoreZPos = lastBox;
+                highScore.localPosition = new Vector3(highScore.localPosition.x, highScore.localPosition.y,
+                    Scriptable.GameData().highScoreZPos);
+                SaveManager.SaveGameData(Scriptable.GameData());
+            }
         }
     }
 
