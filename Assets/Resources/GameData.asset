@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb7209e3d961de449c14847baf3024b, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  totalMoneyAmount: 0
+  totalMoneyAmount: 100
   bulletPrices:
   - price: 100
     isReached: 0
