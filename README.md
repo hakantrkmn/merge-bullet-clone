@@ -11,3 +11,5 @@ merge aşamasındaki duvarlar hepsi aynı canda oluşturuluyor. ek bir bilgi olm
 
 
 gate objesini kalıtım alarak yaptım. biraz gereksiz gibi ama bilemedim :D
+
+2 adet level var. next level ve try again butonlarını koydum. fakat levellar bitince başa dönüp devam etmeyi eklemedim.
